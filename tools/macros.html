@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Macro Calculator — FitMetrics.io</title><meta name="description" content="Free macro calculator. Get ideal protein, carb and fat targets for fat loss, muscle gain, cutting, or maintenance."><link rel="stylesheet" href="../style.css">
+<style>
+.goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1.5rem;}
+.goal-opt{background:rgba(20,20,42,.8);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:.75rem;cursor:pointer;font-family:'Poppins',sans-serif;font-size:.8rem;font-weight:600;color:var(--text2);transition:all .25s;text-align:center;}
+.goal-opt.sel{background:rgba(139,92,246,.15);border-color:rgba(139,92,246,.45);color:var(--v);}
+.mbar{background:rgba(20,20,42,.8);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:1.1rem 1.25rem;margin-bottom:.6rem;}
+.mbar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.55rem;}
+.mbar-name{font-size:.84rem;font-weight:700;}
+.mbar-val{font-size:1.1rem;font-weight:800;}
+.mbar-track{height:6px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden;}
+.mbar-fill{height:100%;border-radius:100px;transition:width 1.1s cubic-bezier(.34,1.56,.64,1);}
+.mbar-info{font-size:.63rem;color:var(--text3);margin-top:.28rem;}
+</style>
+</head>
+<body>
+<div class="bg-scene"><div class="bg-orb o1" style="background:radial-gradient(circle,rgba(6,78,59,.9),transparent 65%)"></div><div class="bg-orb o2" style="background:radial-gradient(circle,rgba(16,185,129,.4),transparent 65%)"></div><div class="bg-orb o3"></div></div>
+<div class="bg-grid"></div><div id="pts"></div>
+<span id="root-path" data-root="../"></span><div id="nav-placeholder"></div>
+<div class="page">
+  <div class="ad-bar"><div class="ad-unit">Advertisement · 728×90</div></div>
+  <div class="hero"><div class="pill-badge"><div class="badge-dot"></div>Nutrition Calculator</div><h1 class="hero-title">Macro Tracker</h1><p class="hero-sub">Get your perfect protein, carb & fat breakdown tailored to your fitness goal</p></div>
+  <div class="tool-layout">
+    <div><div class="card" id="mainCard"><div class="card-body">
+      <div class="f-label" style="margin-bottom:.65rem;">Your Fitness Goal</div>
+      <div class="goal-grid">
+        <button class="goal-opt sel" id="g-loss" onclick="selGoal('loss',this)">🔥 Fat Loss</button>
+        <button class="goal-opt" id="g-cut" onclick="selGoal('cut',this)">✂️ Cutting</button>
+        <button class="goal-opt" id="g-main" onclick="selGoal('maintain',this)">⚖️ Maintain</button>
+        <button class="goal-opt" id="g-gain" onclick="selGoal('gain',this)">💪 Muscle Gain</button>
+      </div>
+      <div class="fields">
+        <div><div class="f-label">Gender</div><div class="f-wrap"><select id="gender"><option value="male">Male</option><option value="female">Female</option></select></div></div>
+        <div><div class="f-label">Age</div><div class="f-wrap"><input type="number" id="age" value="25" min="10" max="100" placeholder="25"><span class="f-unit">yrs</span></div><div class="slider-wrap"><div class="slider-track"><div class="slider-fill" id="ageFill"></div><input type="range" class="slider-input" id="ageSld" min="10" max="100" value="25"></div></div></div>
+        <div><div class="f-label">Weight (kg)</div><div class="f-wrap"><input type="number" id="wt" value="70" min="20" max="250" placeholder="70"><span class="f-unit">kg</span></div><div class="slider-wrap"><div class="slider-track"><div class="slider-fill" id="wtFill"></div><input type="range" class="slider-input" id="wtSld" min="20" max="250" value="70"></div></div></div>
+        <div><div class="f-label">Height (cm)</div><div class="f-wrap"><input type="number" id="ht" value="175" min="50" max="250" placeholder="175"><span class="f-unit">cm</span></div><div class="slider-wrap"><div class="slider-track"><div class="slider-fill" id="htFill"></div><input type="range" class="slider-input" id="htSld" min="50" max="250" value="175"></div></div></div>
+        <div><div class="f-label">Activity Level</div><div class="f-wrap"><select id="act"><option value="1.2">Sedentary</option><option value="1.375">Lightly Active</option><option value="1.55" selected>Moderately Active</option><option value="1.725">Very Active</option><option value="1.9">Extremely Active</option></select></div></div>
+      </div>
+      <button class="btn-calc" id="calcBtn" onclick="doCalc(event)">🥗 &nbsp;Calculate Macros</button>
+      <div class="result-panel" id="result">
+        <div class="res-hero gn" style="margin-bottom:.9rem;">
+          <div><div class="res-tag">Daily Calories</div><div class="res-big" id="rCal" style="color:#10b981">—</div><div class="res-sublabel">kcal per day</div></div>
+          <div style="text-align:right"><div class="res-badge badge-gn" id="rBadge">—</div><div class="res-sub" id="rGoalLbl"></div></div>
+        </div>
+        <div id="macroBars"></div>
+        <div class="insight"><div class="ins-ico">🥗</div><div class="ins-txt" id="iTxt"></div></div>
+      </div>
+    </div></div></div>
+    <div><div class="ad-unit-sq">Advertisement<br>300×250</div><div class="sidebar-box"><div class="sidebar-title">Other Tools</div><a class="sidebar-link" href="bmi.html"><span class="sidebar-link-ico">⚖️</span>BMI Calculator</a><a class="sidebar-link" href="calories.html"><span class="sidebar-link-ico">🔥</span>Calorie Calculator</a><a class="sidebar-link" href="bodyfat.html"><span class="sidebar-link-ico">📊</span>Body Fat</a><a class="sidebar-link" href="idealweight.html"><span class="sidebar-link-ico">🎯</span>Ideal Weight</a><a class="sidebar-link" href="water.html"><span class="sidebar-link-ico">💧</span>Water Intake</a></div></div>
+  </div>
+  <div class="ad-bar"><div class="ad-unit">Advertisement · 728×90</div></div>
+</div>
+<div id="footer-placeholder"></div>
+<script src="../nav.js"></script><script src="../main.js"></script>
+<script>
+let goal='loss';
+const GM={loss:{p:.4,c:.35,f:.25,adj:-500,l:'Fat Loss'},cut:{p:.45,c:.3,f:.25,adj:-300,l:'Cutting'},maintain:{p:.3,c:.45,f:.25,adj:0,l:'Maintenance'},gain:{p:.3,c:.45,f:.25,adj:300,l:'Muscle Gain'}};
+function selGoal(g,btn){goal=g;document.querySelectorAll('.goal-opt').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
+bindSlider('age','ageSld','ageFill',10,100);bindSlider('wt','wtSld','wtFill',20,250);bindSlider('ht','htSld','htFill',50,250);
+function doCalc(e){
+  if(e)ripple(document.getElementById('calcBtn'),e);
+  const age=+document.getElementById('age').value,wt=+document.getElementById('wt').value,ht=+document.getElementById('ht').value;
+  if(!age||!wt||!ht){shake();return;}
+  const g=document.getElementById('gender').value,act=+document.getElementById('act').value;
+  const bmr=g==='male'?10*wt+6.25*ht-5*age+5:10*wt+6.25*ht-5*age-161;
+  const gd=GM[goal];const total=Math.round(bmr*act)+gd.adj;
+  const prot=Math.round((total*gd.p)/4),carbs=Math.round((total*gd.c)/4),fat=Math.round((total*gd.f)/9);
+  const el=document.getElementById('rCal');const prev=parseFloat(el.textContent.replace(/,/g,''))||total;el.classList.remove('pop');void el.offsetWidth;animNum(el,prev,total,750,0);el.classList.add('pop');
+  document.getElementById('rBadge').textContent=gd.l;
+  document.getElementById('rGoalLbl').textContent=gd.adj>0?`+${gd.adj} kcal surplus`:gd.adj<0?`${gd.adj} kcal deficit`:'Maintenance calories';
+  const ms=[{n:'🥩 Protein',v:prot,u:'g',cal:prot*4,col:'#10b981',pct:Math.round(gd.p*100)},{n:'🌾 Carbohydrates',v:carbs,u:'g',cal:carbs*4,col:'#8b5cf6',pct:Math.round(gd.c*100)},{n:'🥑 Fats',v:fat,u:'g',cal:fat*9,col:'#ec4899',pct:Math.round(gd.f*100)}];
+  document.getElementById('macroBars').innerHTML=ms.map(m=>`<div class="mbar"><div class="mbar-top"><span class="mbar-name">${m.n}</span><span class="mbar-val" style="color:${m.col}">${m.v}${m.u}</span></div><div class="mbar-track"><div class="mbar-fill" style="width:${m.pct}%;background:${m.col};box-shadow:0 0 14px ${m.col}55;"></div></div><div class="mbar-info">${m.cal} kcal · ${m.pct}% of daily total</div></div>`).join('');
+  document.getElementById('iTxt').textContent=`For ${gd.l.toLowerCase()}, aim for ${total.toLocaleString()} kcal/day with ${prot}g protein, ${carbs}g carbs, and ${fat}g fats. Protein is your most critical macro — it preserves muscle and maximises satiety.`;
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body>
+</html>

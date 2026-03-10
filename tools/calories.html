@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calorie Calculator (TDEE) — FitMetrics.io</title>
+<meta name="description" content="Free TDEE calorie calculator. Find your daily calorie needs and get personalised targets for weight loss, maintenance, and muscle gain.">
+<link rel="canonical" href="https://fitmetrics.io/tools/calories.html">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="bg-scene"><div class="bg-orb o1" style="background:radial-gradient(circle,rgba(153,27,27,.8),transparent 65%)"></div><div class="bg-orb o2" style="background:radial-gradient(circle,rgba(249,115,22,.5),transparent 65%)"></div><div class="bg-orb o3"></div></div>
+<div class="bg-grid"></div><div id="pts"></div>
+<span id="root-path" data-root="../"></span>
+<div id="nav-placeholder"></div>
+<div class="page">
+  <div class="ad-bar"><div class="ad-unit">Advertisement · 728×90</div></div>
+  <div class="hero">
+    <div class="pill-badge"><div class="badge-dot"></div>TDEE Calculator</div>
+    <h1 class="hero-title">Calorie Calculator</h1>
+    <p class="hero-sub">Discover your Total Daily Energy Expenditure and get personalised calorie targets for your goal</p>
+  </div>
+  <div class="tool-layout">
+    <div>
+      <div class="card" id="mainCard"><div class="card-body">
+        <div class="unit-toggle">
+          <div class="unit-track" id="uTrack"></div>
+          <button class="unit-btn on" id="bM" onclick="setU('metric')">⚡ Metric</button>
+          <button class="unit-btn" id="bI" onclick="setU('imperial')">🌐 Imperial</button>
+        </div>
+        <div class="fields">
+          <div>
+            <div class="f-label">Age</div>
+            <div class="f-wrap"><input type="number" id="age" value="25" min="10" max="100" placeholder="25"><span class="f-unit">yrs</span></div>
+            <div class="slider-wrap"><div class="slider-track"><div class="slider-fill" id="ageFill"></div><input type="range" class="slider-input" id="ageSld" min="10" max="100" value="25"></div></div>
+          </div>
+          <div>
+            <div class="f-label">Gender</div>
+            <div class="f-wrap"><select id="gender"><option value="male">Male</option><option value="female">Female</option></select></div>
+          </div>
+          <div>
+            <div class="f-label">Height</div>
+            <div class="f-row">
+              <div class="f-wrap" id="wCm"><input type="number" id="hCm" value="175" min="100" max="250" placeholder="175"><span class="f-unit">cm</span></div>
+              <div class="f-wrap" id="wFt" style="display:none"><input type="number" id="hFt" value="5" placeholder="5"><span class="f-unit">ft</span></div>
+              <div class="f-wrap" id="wIn" style="display:none"><input type="number" id="hIn" value="9" placeholder="9"><span class="f-unit">in</span></div>
+            </div>
+            <div class="slider-wrap" id="hSW"><div class="slider-track"><div class="slider-fill" id="hFill"></div><input type="range" class="slider-input" id="hSld" min="100" max="250" value="175"></div></div>
+          </div>
+          <div>
+            <div class="f-label">Weight</div>
+            <div class="f-wrap"><input type="number" id="wV" value="70" min="20" max="300" placeholder="70"><span class="f-unit" id="wU">kg</span></div>
+            <div class="slider-wrap"><div class="slider-track"><div class="slider-fill" id="wFill"></div><input type="range" class="slider-input" id="wSld" min="20" max="300" value="70"></div></div>
+          </div>
+          <div>
+            <div class="f-label">Activity Level</div>
+            <div class="f-wrap"><select id="activity">
+              <option value="1.2">Sedentary — desk job, little exercise</option>
+              <option value="1.375">Lightly Active — 1–3 days per week</option>
+              <option value="1.55" selected>Moderately Active — 3–5 days per week</option>
+              <option value="1.725">Very Active — 6–7 days per week</option>
+              <option value="1.9">Extremely Active — athlete or physical job</option>
+            </select></div>
+          </div>
+        </div>
+        <button class="btn-calc" id="calcBtn" onclick="doCalc(event)">🔥 &nbsp;Calculate Calories</button>
+        <div class="result-panel" id="result">
+          <div class="res-hero gv">
+            <div><div class="res-tag">Daily Calories (TDEE)</div><div class="res-big" id="rNum" style="color:#f97316">—</div><div class="res-sublabel">kcal per day</div></div>
+            <div style="text-align:right"><div class="res-badge badge-or">Maintenance</div><div class="res-sub" id="rSub">Your baseline</div></div>
+          </div>
+          <div class="insight"><div class="ins-ico">🔥</div><div class="ins-txt" id="iTxt"></div></div>
+          <div style="margin-bottom:.9rem;">
+            <div class="f-label" style="margin-bottom:.7rem;">Calorie Targets by Goal</div>
+            <div id="goalRows" style="display:flex;flex-direction:column;gap:.5rem;"></div>
+          </div>
+          <div class="stats">
+            <div class="stat"><div class="stat-l">BMR</div><div class="stat-v" id="sBMR">—</div></div>
+            <div class="stat"><div class="stat-l">TDEE</div><div class="stat-v" id="sTDEE">—</div></div>
+            <div class="stat"><div class="stat-l">Protein Goal</div><div class="stat-v" id="sProt">—</div></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+    <div>
+      <div class="ad-unit-sq">Advertisement<br>300×250</div>
+      <div class="sidebar-box">
+        <div class="sidebar-title">Other Tools</div>
+        <a class="sidebar-link" href="bmi.html"><span class="sidebar-link-ico">⚖️</span>BMI Calculator</a>
+        <a class="sidebar-link" href="bodyfat.html"><span class="sidebar-link-ico">📊</span>Body Fat Estimator</a>
+        <a class="sidebar-link" href="macros.html"><span class="sidebar-link-ico">🥗</span>Macro Tracker</a>
+        <a class="sidebar-link" href="idealweight.html"><span class="sidebar-link-ico">🎯</span>Ideal Weight</a>
+        <a class="sidebar-link" href="water.html"><span class="sidebar-link-ico">💧</span>Water Intake</a>
+      </div>
+    </div>
+  </div>
+  <div class="ad-bar"><div class="ad-unit">Advertisement · 728×90</div></div>
+</div>
+<div id="footer-placeholder"></div>
+<script src="../nav.js"></script><script src="../main.js"></script>
+<script>
+let unit='metric';
+function setU(u){unit=u;const m=u==='metric';document.getElementById('bM').classList.toggle('on',m);document.getElementById('bI').classList.toggle('on',!m);document.getElementById('uTrack').className='unit-track'+(m?'':' right');document.getElementById('wCm').style.display=m?'':'none';document.getElementById('wFt').style.display=m?'none':'';document.getElementById('wIn').style.display=m?'none':'';document.getElementById('hSW').style.display=m?'':'none';document.getElementById('wU').textContent=m?'kg':'lbs';document.getElementById('wSld').min=m?20:44;document.getElementById('wSld').max=m?300:660;document.getElementById('result').classList.remove('show');}
+bindSlider('age','ageSld','ageFill',10,100);
+bindSlider('hCm','hSld','hFill',100,250);
+bindSlider('wV','wSld','wFill',20,300);
+function doCalc(e){
+  if(e)ripple(document.getElementById('calcBtn'),e);
+  const age=+document.getElementById('age').value;
+  const gender=document.getElementById('gender').value;
+  const act=+document.getElementById('activity').value;
+  let hCm,wKg;
+  if(unit==='metric'){hCm=+document.getElementById('hCm').value;wKg=+document.getElementById('wV').value;}
+  else{const ft=+document.getElementById('hFt').value||0,inch=+document.getElementById('hIn').value||0;hCm=(ft*12+inch)*2.54;wKg=+document.getElementById('wV').value*.453592;}
+  if(!age||!hCm||!wKg){shake();return;}
+  const bmr=gender==='male'?10*wKg+6.25*hCm-5*age+5:10*wKg+6.25*hCm-5*age-161;
+  const tdee=Math.round(bmr*act);
+  const el=document.getElementById('rNum');const prev=parseFloat(el.textContent.replace(/,/g,''))||tdee;
+  el.classList.remove('pop');void el.offsetWidth;animNum(el,prev,tdee,750,0);el.classList.add('pop');
+  document.getElementById('rSub').textContent='Your maintenance calories';
+  document.getElementById('sBMR').textContent=Math.round(bmr)+' kcal';
+  document.getElementById('sTDEE').textContent=tdee+' kcal';
+  document.getElementById('sProt').textContent=Math.round(wKg*2.2)+'g/day';
+  document.getElementById('iTxt').textContent=`Your BMR (calories burned at complete rest) is ${Math.round(bmr)} kcal/day. With your activity level, you need ${tdee} kcal/day to maintain your current weight. Adjust up or down based on your goal below.`;
+  const goals=[{lbl:'🏋️ Muscle Gain',cal:tdee+300,c:'#10b981'},{lbl:'⚖️ Maintain Weight',cal:tdee,c:'#8b5cf6'},{lbl:'🔥 Mild Fat Loss (−0.25kg/wk)',cal:tdee-300,c:'#f59e0b'},{lbl:'💪 Fat Loss (−0.5kg/wk)',cal:tdee-500,c:'#ef4444'}];
+  document.getElementById('goalRows').innerHTML=goals.map(g=>`<div style="display:flex;justify-content:space-between;align-items:center;background:rgba(20,20,42,.8);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:.75rem 1.1rem;"><span style="font-size:.84rem;font-weight:600;">${g.lbl}</span><span style="font-size:1rem;font-weight:800;color:${g.c}">${g.cal.toLocaleString()} kcal</span></div>`).join('');
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body>
+</html>
