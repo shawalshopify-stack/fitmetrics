@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ideal Weight Calculator — FitMetrics.io</title><meta name="description" content="Find your ideal body weight using 4 scientific formulas: Hamwi, Devine, Robinson, and Miller. Free ideal weight calculator."><link rel="stylesheet" href="../style.css"></head>
+<body>
+<div class="bg-scene"><div class="bg-orb o1" style="background:radial-gradient(circle,rgba(120,53,15,.9),transparent 65%)"></div><div class="bg-orb o2" style="background:radial-gradient(circle,rgba(245,158,11,.4),transparent 65%)"></div><div class="bg-orb o3"></div></div>
+<div class="bg-grid"></div><div id="pts"></div>
+<span id="root-path" data-root="../"></span><div id="nav-placeholder"></div>
+<div class="page">
+  <div class="ad-bar"><div class="ad-unit">Advertisement · 728×90</div></div>
+  <div class="hero"><div class="pill-badge"><div class="badge-dot"></div>4 Formulas</div><h1 class="hero-title">Ideal Weight</h1><p class="hero-sub">Discover your ideal weight range using four scientifically validated formulas</p></div>
+  <div class="tool-layout">
+    <div><div class="card" id="mainCard"><div class="card-body">
+      <div class="unit-toggle"><div class="unit-track" id="uTrack"></div><button class="unit-btn on" id="bM" onclick="setU('metric')">⚡ Metric</button><button class="unit-btn" id="bI" onclick="setU('imperial')">🌐 Imperial</button></div>
+      <div class="fields">
+        <div><div class="f-label">Gender</div><div class="f-wrap"><select id="gender"><option value="male">Male</option><option value="female">Female</option></select></div></div>
+        <div><div class="f-label">Height</div><div class="f-row"><div class="f-wrap" id="wCm"><input type="number" id="hCm" value="175" min="100" max="250" placeholder="175"><span class="f-unit">cm</span></div><div class="f-wrap" id="wFt" style="display:none"><input type="number" id="hFt" value="5" placeholder="5"><span class="f-unit">ft</span></div><div class="f-wrap" id="wIn" style="display:none"><input type="number" id="hIn" value="9" placeholder="9"><span class="f-unit">in</span></div></div><div class="slider-wrap" id="hSW"><div class="slider-track"><div class="slider-fill" id="hFill"></div><input type="range" class="slider-input" id="hSld" min="100" max="250" value="175"></div></div></div>
+      </div>
+      <button class="btn-calc" id="calcBtn" onclick="doCalc(event)">🎯 &nbsp;Find Ideal Weight</button>
+      <div class="result-panel" id="result">
+        <div class="res-hero ga"><div><div class="res-tag">Ideal Weight Range</div><div class="res-big" id="rNum" style="color:#f59e0b;font-size:2.2rem;line-height:1.3;">—</div></div><div style="text-align:right"><div class="res-badge badge-am">Healthy Range</div><div class="res-sub" id="rSub"></div></div></div>
+        <div style="margin:.9rem 0;"><div class="f-label" style="margin-bottom:.65rem;">Result by Formula</div><div id="fRows" style="display:flex;flex-direction:column;gap:.5rem;"></div></div>
+        <div class="insight"><div class="ins-ico">🎯</div><div class="ins-txt" id="iTxt"></div></div>
+        <div class="stats"><div class="stat"><div class="stat-l">Minimum</div><div class="stat-v" id="sMin">—</div></div><div class="stat"><div class="stat-l">Average</div><div class="stat-v" id="sAvg">—</div></div><div class="stat"><div class="stat-l">Maximum</div><div class="stat-v" id="sMax">—</div></div></div>
+      </div>
+    </div></div></div>
+    <div><div class="ad-unit-sq">Advertisement<br>300×250</div><div class="sidebar-box"><div class="sidebar-title">Other Tools</div><a class="sidebar-link" href="bmi.html"><span class="sidebar-link-ico">⚖️</span>BMI Calculator</a><a class="sidebar-link" href="calories.html"><span class="sidebar-link-ico">🔥</span>Calorie Calculator</a><a class="sidebar-link" href="bodyfat.html"><span class="sidebar-link-ico">📊</span>Body Fat</a><a class="sidebar-link" href="macros.html"><span class="sidebar-link-ico">🥗</span>Macros</a><a class="sidebar-link" href="water.html"><span class="sidebar-link-ico">💧</span>Water Intake</a></div></div>
+  </div>
+  <div class="ad-bar"><div class="ad-unit">Advertisement · 728×90</div></div>
+</div>
+<div id="footer-placeholder"></div>
+<script src="../nav.js"></script><script src="../main.js"></script>
+<script>
+let unit='metric';
+function setU(u){unit=u;const m=u==='metric';document.getElementById('bM').classList.toggle('on',m);document.getElementById('bI').classList.toggle('on',!m);document.getElementById('uTrack').className='unit-track'+(m?'':' right');document.getElementById('wCm').style.display=m?'':'none';document.getElementById('wFt').style.display=m?'none':'';document.getElementById('wIn').style.display=m?'none':'';document.getElementById('hSW').style.display=m?'':'none';document.getElementById('result').classList.remove('show');}
+bindSlider('hCm','hSld','hFill',100,250);
+function getHcm(){if(unit==='metric')return +document.getElementById('hCm').value;const ft=+document.getElementById('hFt').value||0,inch=+document.getElementById('hIn').value||0;return(ft*12+inch)*2.54;}
+function doCalc(e){
+  if(e)ripple(document.getElementById('calcBtn'),e);
+  const hCm=getHcm();if(!hCm||hCm<100){shake();return;}
+  const m=document.getElementById('gender').value==='male';
+  const ex=(hCm/2.54)-60;
+  const conv=unit==='metric'?1:2.20462,ul=unit==='metric'?'kg':'lbs';
+  const fs=[{n:'Hamwi',v:m?48+2.7*ex:45.5+2.2*ex},{n:'Devine',v:m?50+2.3*ex:45.5+2.3*ex},{n:'Robinson',v:m?52+1.9*ex:49+1.7*ex},{n:'Miller',v:m?56.2+1.41*ex:53.1+1.36*ex}];
+  const vals=fs.map(f=>f.v),mn=Math.min(...vals),mx=Math.max(...vals),avg=vals.reduce((a,b)=>a+b,0)/vals.length;
+  document.getElementById('rNum').textContent=`${(mn*conv).toFixed(1)}–${(mx*conv).toFixed(1)} ${ul}`;
+  document.getElementById('rSub').textContent='Across 4 scientific formulas';
+  document.getElementById('fRows').innerHTML=fs.map(f=>`<div style="display:flex;justify-content:space-between;align-items:center;background:rgba(20,20,42,.8);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:.75rem 1.1rem;"><span style="font-size:.85rem;font-weight:600;">${f.n} Formula</span><span style="font-size:1rem;font-weight:800;color:#f59e0b">${(f.v*conv).toFixed(1)} ${ul}</span></div>`).join('');
+  document.getElementById('sMin').textContent=(mn*conv).toFixed(1)+' '+ul;
+  document.getElementById('sAvg').textContent=(avg*conv).toFixed(1)+' '+ul;
+  document.getElementById('sMax').textContent=(mx*conv).toFixed(1)+' '+ul;
+  document.getElementById('iTxt').textContent=`Based on your height of ${hCm.toFixed(0)} cm, your ideal weight range is ${(mn*conv).toFixed(1)}–${(mx*conv).toFixed(1)} ${ul}. The average across all four formulas is ${(avg*conv).toFixed(1)} ${ul}. These are guidelines — body composition and health markers matter more than the scale alone.`;
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body>
+</html>

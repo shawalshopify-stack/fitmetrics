@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BMI Calculator — FitMetrics.io</title>
+<meta name="description" content="Free BMI calculator. Instantly calculate your Body Mass Index, see your category on the scale, and get a personalised health insight.">
+<link rel="canonical" href="https://fitmetrics.io/tools/bmi.html">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="bg-scene"><div class="bg-orb o1"></div><div class="bg-orb o2"></div><div class="bg-orb o3"></div></div>
+<div class="bg-grid"></div><div id="pts"></div>
+<span id="root-path" data-root="../"></span>
+<div id="nav-placeholder"></div>
+
+<div class="page">
+  <div class="ad-bar"><div class="ad-unit">Advertisement · 728×90</div></div>
+
+  <div class="hero">
+    <div class="pill-badge"><div class="badge-dot"></div>Health Calculator</div>
+    <h1 class="hero-title">BMI Calculator</h1>
+    <p class="hero-sub">Calculate your Body Mass Index and discover what it means for your health</p>
+  </div>
+
+  <div class="tool-layout">
+    <div>
+      <div class="card" id="mainCard"><div class="card-body">
+        <div class="unit-toggle">
+          <div class="unit-track" id="uTrack"></div>
+          <button class="unit-btn on" id="bM" onclick="setU('metric')">⚡ Metric</button>
+          <button class="unit-btn" id="bI" onclick="setU('imperial')">🌐 Imperial</button>
+        </div>
+        <div class="fields">
+          <div>
+            <div class="f-label">Height</div>
+            <div class="f-row">
+              <div class="f-wrap" id="wCm"><input type="number" id="hCm" value="175" min="50" max="250" placeholder="175"><span class="f-unit">cm</span></div>
+              <div class="f-wrap" id="wFt" style="display:none"><input type="number" id="hFt" value="5" min="1" max="8" placeholder="5"><span class="f-unit">ft</span></div>
+              <div class="f-wrap" id="wIn" style="display:none"><input type="number" id="hIn" value="9" min="0" max="11" placeholder="9"><span class="f-unit">in</span></div>
+            </div>
+            <div class="slider-wrap" id="hSW"><div class="slider-track"><div class="slider-fill" id="hFill"></div><input type="range" class="slider-input" id="hSld" min="50" max="250" value="175"></div></div>
+          </div>
+          <div>
+            <div class="f-label">Weight</div>
+            <div class="f-wrap"><input type="number" id="wV" value="70" min="20" max="300" placeholder="70"><span class="f-unit" id="wU">kg</span></div>
+            <div class="slider-wrap"><div class="slider-track"><div class="slider-fill" id="wFill"></div><input type="range" class="slider-input" id="wSld" min="20" max="300" value="70"></div></div>
+          </div>
+        </div>
+        <button class="btn-calc" id="calcBtn" onclick="doCalc(event)">✦ &nbsp;Calculate My BMI</button>
+
+        <div class="result-panel" id="result">
+          <div class="res-hero" id="rHero">
+            <div><div class="res-tag">Your BMI Score</div><div class="res-big" id="rNum">—</div></div>
+            <div style="text-align:right"><div class="res-badge" id="rBadge">—</div><div class="res-sub" id="rSub"></div></div>
+          </div>
+          <div class="scale-wrap">
+            <div class="scale-label">BMI Scale Indicator</div>
+            <div class="scale-bar"><div class="scale-needle" id="needle" style="left:0%"></div></div>
+            <div class="scale-nums"><span>16</span><span>18.5</span><span>25</span><span>30</span><span>40+</span></div>
+            <div class="scale-zones">
+              <div class="sz" style="flex:1.1;color:#06b6d4">Under</div>
+              <div class="sz" style="flex:1.7;color:#10b981">Normal</div>
+              <div class="sz" style="flex:1.1;color:#f59e0b">Over</div>
+              <div class="sz" style="flex:1.1;color:#ef4444">Obese</div>
+            </div>
+          </div>
+          <div class="insight"><div class="ins-ico" id="iIco">💡</div><div class="ins-txt" id="iTxt"></div></div>
+          <div class="stats">
+            <div class="stat"><div class="stat-l">Ideal Weight</div><div class="stat-v" id="sIdeal">—</div></div>
+            <div class="stat"><div class="stat-l">Difference</div><div class="stat-v" id="sDiff">—</div></div>
+            <div class="stat"><div class="stat-l">Status</div><div class="stat-v" id="sStatus">—</div></div>
+          </div>
+        </div>
+      </div></div>
+
+      <div style="margin-top:2.5rem;" class="content-page" style="padding:0">
+        <h2>What is BMI?</h2>
+        <p>Body Mass Index (BMI) is a value derived from your height and weight, used as a screening tool to categorise individuals into underweight, normal weight, overweight, and obese ranges. The formula is: <strong>BMI = weight (kg) ÷ height² (m²)</strong>.</p>
+        <div class="info-grid" style="margin:1.2rem 0;">
+          <div class="info-box" style="background:rgba(6,182,212,.07);border:1px solid rgba(6,182,212,.2)"><div style="color:#06b6d4;font-weight:700;font-size:.85rem">Underweight</div><div style="color:var(--text2);font-size:.8rem">BMI below 18.5</div></div>
+          <div class="info-box" style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.2)"><div style="color:#10b981;font-weight:700;font-size:.85rem">Normal Weight</div><div style="color:var(--text2);font-size:.8rem">BMI 18.5 – 24.9</div></div>
+          <div class="info-box" style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2)"><div style="color:#f59e0b;font-weight:700;font-size:.85rem">Overweight</div><div style="color:var(--text2);font-size:.8rem">BMI 25.0 – 29.9</div></div>
+          <div class="info-box" style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2)"><div style="color:#ef4444;font-weight:700;font-size:.85rem">Obese</div><div style="color:var(--text2);font-size:.8rem">BMI 30.0 and above</div></div>
+        </div>
+        <p style="font-size:.8rem;color:var(--text3)">⚠️ BMI is a screening tool only. It doesn't account for muscle mass, bone density, or fat distribution. Always consult a healthcare professional for a full health assessment.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="ad-unit-sq">Advertisement<br>300×250</div>
+      <div class="sidebar-box">
+        <div class="sidebar-title">Other Tools</div>
+        <a class="sidebar-link" href="calories.html"><span class="sidebar-link-ico">🔥</span>Calorie Calculator</a>
+        <a class="sidebar-link" href="bodyfat.html"><span class="sidebar-link-ico">📊</span>Body Fat Estimator</a>
+        <a class="sidebar-link" href="macros.html"><span class="sidebar-link-ico">🥗</span>Macro Tracker</a>
+        <a class="sidebar-link" href="idealweight.html"><span class="sidebar-link-ico">🎯</span>Ideal Weight</a>
+        <a class="sidebar-link" href="water.html"><span class="sidebar-link-ico">💧</span>Water Intake</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-bar"><div class="ad-unit">Advertisement · 728×90</div></div>
+</div>
+
+<div id="footer-placeholder"></div>
+<script src="../nav.js"></script>
+<script src="../main.js"></script>
+<script>
+let unit='metric';
+function setU(u){
+  unit=u;const m=u==='metric';
+  document.getElementById('bM').classList.toggle('on',m);
+  document.getElementById('bI').classList.toggle('on',!m);
+  document.getElementById('uTrack').className='unit-track'+(m?'':' right');
+  document.getElementById('wCm').style.display=m?'':'none';
+  document.getElementById('wFt').style.display=m?'none':'';
+  document.getElementById('wIn').style.display=m?'none':'';
+  document.getElementById('hSW').style.display=m?'':'none';
+  document.getElementById('wU').textContent=m?'kg':'lbs';
+  document.getElementById('wSld').min=m?20:44;
+  document.getElementById('wSld').max=m?300:660;
+  document.getElementById('result').classList.remove('show');
+}
+bindSlider('hCm','hSld','hFill',50,250);
+bindSlider('wV','wSld','wFill',20,300);
+
+function getData(){
+  let hM,wKg;
+  if(unit==='metric'){const h=+document.getElementById('hCm').value,w=+document.getElementById('wV').value;if(!h||!w)return null;hM=h/100;wKg=w;}
+  else{const ft=+document.getElementById('hFt').value||0,inch=+document.getElementById('hIn').value||0,lbs=+document.getElementById('wV').value;if(!lbs||(!ft&&!inch))return null;hM=(ft*12+inch)*.0254;wKg=lbs*.453592;}
+  return hM>0?{bmi:wKg/(hM*hM),hM,wKg}:null;
+}
+function getCat(b){
+  if(b<18.5)return{l:'Underweight',bc:'badge-cy',hc:'gc',ic:'🌊',d:'Below healthy range',i:'Your BMI suggests you may be underweight. This can impact energy, immunity, and vitality. Consider speaking with a nutritionist for a personalised plan to reach a healthy weight.',s:'Under',c:'#06b6d4'};
+  if(b<25)return{l:'Normal Weight',bc:'badge-gn',hc:'gn',ic:'✨',d:'Healthy range',i:"You're in the healthy BMI range — excellent! Sustain this with balanced nutrition, regular movement, and quality sleep. You're in the optimal zone for long-term wellbeing.",s:'Healthy',c:'#10b981'};
+  if(b<30)return{l:'Overweight',bc:'badge-am',hc:'ga',ic:'⚡',d:'Above healthy range',i:'Small, consistent changes — like 30 minutes of daily movement and mindful eating — can guide you back into the healthy range. Every step counts.',s:'Over',c:'#f59e0b'};
+  return{l:'Obese',bc:'badge-rd',hc:'gr',ic:'🔥',d:'Significantly above range',i:'Your BMI indicates a higher health risk category. We encourage you to connect with a healthcare professional for compassionate, personalised guidance and support.',s:'Obese',c:'#ef4444'};
+}
+function bPos(b){return Math.max(0,Math.min(100,((Math.min(b,40)-16)/(40-16))*100));}
+function doCalc(e){
+  if(e)ripple(document.getElementById('calcBtn'),e);
+  const d=getData();if(!d){shake();return;}
+  const{bmi,hM,wKg}=d;const cat=getCat(bmi);
+  const el=document.getElementById('rNum');const prev=parseFloat(el.textContent)||bmi;
+  el.classList.remove('pop');void el.offsetWidth;el.style.color=cat.c;
+  animNum(el,prev,bmi,750);el.classList.add('pop');
+  document.getElementById('rBadge').textContent=cat.l;document.getElementById('rBadge').className='res-badge '+cat.bc;
+  document.getElementById('rSub').textContent=cat.d;
+  document.getElementById('rHero').className='res-hero '+cat.hc;
+  setTimeout(()=>document.getElementById('needle').style.left=bPos(bmi)+'%',80);
+  document.getElementById('iIco').textContent=cat.ic;document.getElementById('iTxt').textContent=cat.i;
+  const conv=unit==='metric'?1:2.20462,ul=unit==='metric'?'kg':'lbs';
+  const ideal=21.75*(hM*hM),diff=wKg-ideal;
+  document.getElementById('sIdeal').textContent=(ideal*conv).toFixed(1)+' '+ul;
+  document.getElementById('sDiff').textContent=(diff>=0?'+':'')+((diff)*conv).toFixed(1)+' '+ul;
+  document.getElementById('sStatus').textContent=cat.s;
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body>
+</html>

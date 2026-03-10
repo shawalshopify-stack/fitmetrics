@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Water Intake Calculator — FitMetrics.io</title><meta name="description" content="Free water intake calculator. Find your daily hydration target based on weight, activity level, and climate. Displayed in litres, cups and fl oz."><link rel="stylesheet" href="../style.css">
+<style>.cup-row{display:flex;flex-wrap:wrap;gap:.35rem;margin:.6rem 0;}.cup-ico{font-size:1.3rem;opacity:.2;transition:opacity .3s,transform .3s;}.cup-ico.on{opacity:1;animation:cupIn .3s ease forwards;}@keyframes cupIn{0%{transform:scale(0.3);opacity:0;}100%{transform:scale(1);opacity:1;}}</style>
+</head>
+<body>
+<div class="bg-scene"><div class="bg-orb o1" style="background:radial-gradient(circle,rgba(30,58,138,.9),transparent 65%)"></div><div class="bg-orb o2" style="background:radial-gradient(circle,rgba(96,165,250,.4),transparent 65%)"></div><div class="bg-orb o3"></div></div>
+<div class="bg-grid"></div><div id="pts"></div>
+<span id="root-path" data-root="../"></span><div id="nav-placeholder"></div>
+<div class="page">
+  <div class="ad-bar"><div class="ad-unit">Advertisement · 728×90</div></div>
+  <div class="hero"><div class="pill-badge"><div class="badge-dot"></div>Hydration Guide</div><h1 class="hero-title">Water Intake</h1><p class="hero-sub">Discover your perfect daily hydration target based on your body and lifestyle</p></div>
+  <div class="tool-layout">
+    <div><div class="card" id="mainCard"><div class="card-body">
+      <div class="fields">
+        <div><div class="f-label">Body Weight (kg)</div><div class="f-wrap"><input type="number" id="wt" value="70" min="20" max="250" placeholder="70"><span class="f-unit">kg</span></div><div class="slider-wrap"><div class="slider-track"><div class="slider-fill" id="wtFill"></div><input type="range" class="slider-input" id="wtSld" min="20" max="250" value="70"></div></div></div>
+        <div><div class="f-label">Activity Level</div><div class="f-wrap"><select id="act"><option value="0">Sedentary — little or no exercise</option><option value="0.35">Lightly Active — 1–3 days/week</option><option value="0.6" selected>Moderately Active — 3–5 days/week</option><option value="0.95">Very Active — hard exercise 6–7 days</option><option value="1.25">Athlete — twice-daily training</option></select></div></div>
+        <div><div class="f-label">Climate / Temperature</div><div class="f-wrap"><select id="climate"><option value="0">Cool / Temperate</option><option value="0.3" selected>Moderate</option><option value="0.6">Hot / Humid</option><option value="1.0">Very Hot / Tropical</option></select></div></div>
+      </div>
+      <button class="btn-calc" id="calcBtn" onclick="doCalc(event)">💧 &nbsp;Calculate Water Intake</button>
+      <div class="result-panel" id="result">
+        <div class="res-hero" style="background:rgba(30,58,138,.2);border-color:rgba(96,165,250,.25);">
+          <div><div class="res-tag">Daily Water Intake</div><div class="res-big" id="rLtr" style="color:#60a5fa">—</div><div class="res-sublabel">litres per day</div></div>
+          <div style="text-align:right"><div class="res-badge" style="background:rgba(96,165,250,.14);color:#60a5fa;border:1px solid rgba(96,165,250,.3);">💧 Hydrated</div><div class="res-sub" id="rCups"></div></div>
+        </div>
+        <div style="background:rgba(20,20,42,.7);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:1.1rem 1.25rem;margin-bottom:.9rem;">
+          <div class="f-label" style="margin-bottom:.5rem;">Daily Cups Visualised (250ml each)</div>
+          <div class="cup-row" id="cupRow"></div>
+        </div>
+        <div class="insight"><div class="ins-ico">💧</div><div class="ins-txt" id="iTxt"></div></div>
+        <div class="stats"><div class="stat"><div class="stat-l">Litres</div><div class="stat-v" id="sL">—</div></div><div class="stat"><div class="stat-l">Cups (250ml)</div><div class="stat-v" id="sC">—</div></div><div class="stat"><div class="stat-l">Fluid Oz</div><div class="stat-v" id="sO">—</div></div></div>
+      </div>
+    </div></div></div>
+    <div><div class="ad-unit-sq">Advertisement<br>300×250</div><div class="sidebar-box"><div class="sidebar-title">Other Tools</div><a class="sidebar-link" href="bmi.html"><span class="sidebar-link-ico">⚖️</span>BMI Calculator</a><a class="sidebar-link" href="calories.html"><span class="sidebar-link-ico">🔥</span>Calorie Calculator</a><a class="sidebar-link" href="bodyfat.html"><span class="sidebar-link-ico">📊</span>Body Fat</a><a class="sidebar-link" href="macros.html"><span class="sidebar-link-ico">🥗</span>Macros</a><a class="sidebar-link" href="idealweight.html"><span class="sidebar-link-ico">🎯</span>Ideal Weight</a></div></div>
+  </div>
+  <div class="ad-bar"><div class="ad-unit">Advertisement · 728×90</div></div>
+</div>
+<div id="footer-placeholder"></div>
+<script src="../nav.js"></script><script src="../main.js"></script>
+<script>
+bindSlider('wt','wtSld','wtFill',20,250);
+function doCalc(e){
+  if(e)ripple(document.getElementById('calcBtn'),e);
+  const wt=+document.getElementById('wt').value;if(!wt){shake();return;}
+  const act=+document.getElementById('act').value,clim=+document.getElementById('climate').value;
+  const total=wt*0.033+act+clim;
+  const cups=Math.round(total*4),oz=Math.round(total*33.814);
+  const el=document.getElementById('rLtr');const prev=parseFloat(el.textContent)||total;el.classList.remove('pop');void el.offsetWidth;animNum(el,prev,total,700);el.classList.add('pop');
+  document.getElementById('rCups').textContent=cups+' cups per day';
+  document.getElementById('sL').textContent=total.toFixed(1)+' L';document.getElementById('sC').textContent=cups+' cups';document.getElementById('sO').textContent=oz+' fl oz';
+  const row=document.getElementById('cupRow');row.innerHTML='';
+  const show=Math.min(cups,24);
+  for(let i=0;i<show;i++){const c=document.createElement('span');c.className='cup-ico';c.textContent='💧';row.appendChild(c);setTimeout(()=>c.classList.add('on'),i*35+50);}
+  if(cups>24){const m=document.createElement('span');m.style.cssText='font-size:.75rem;color:var(--text3);font-weight:600;align-self:center;';m.textContent=`+${cups-24} more`;row.appendChild(m);}
+  document.getElementById('iTxt').textContent=`For a ${wt}kg person with your activity and climate, you need approximately ${total.toFixed(1)} litres (${cups} cups) of water daily. Spread this evenly — start with 1–2 glasses upon waking, drink before meals, and carry a bottle during exercise. Fruits, vegetables, and beverages all count towards your total.`;
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body>
+</html>

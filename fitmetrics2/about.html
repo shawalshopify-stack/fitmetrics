@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>About Us — FitMetrics.io</title><meta name="description" content="Learn about FitMetrics.io — our mission to make science-backed health tools free and accessible to everyone."><link rel="stylesheet" href="style.css">
+<style>
+.about-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;max-width:760px;margin:2rem auto;}
+.astat{background:rgba(20,20,42,.8);border:1px solid var(--border-hi);border-radius:18px;padding:1.5rem;text-align:center;}
+.astat-n{font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;background:linear-gradient(135deg,var(--v),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.astat-l{font-size:.68rem;font-weight:600;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-top:.3rem;}
+.mission-card{max-width:760px;margin:3rem auto;background:rgba(20,20,42,.8);border:1px solid var(--border-hi);border-radius:24px;padding:2.5rem;text-align:center;opacity:0;transform:translateY(20px);animation:revealUp .7s .2s forwards;}
+.mission-card h2{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;margin-bottom:1rem;}
+.mission-card p{font-size:.95rem;color:var(--text2);line-height:1.8;}
+.values-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;max-width:1000px;margin:2rem auto 4rem;padding:0 1.5rem;}
+.val-card{background:rgba(20,20,42,.8);border:1px solid var(--border-hi);border-radius:18px;padding:1.5rem;}
+.val-ico{font-size:1.8rem;margin-bottom:.6rem;}
+.val-name{font-size:.95rem;font-weight:700;margin-bottom:.4rem;}
+.val-txt{font-size:.82rem;color:var(--text2);line-height:1.65;}
+</style>
+</head>
+<body>
+<div class="bg-scene"><div class="bg-orb o1"></div><div class="bg-orb o2"></div><div class="bg-orb o3"></div></div>
+<div class="bg-grid"></div><div id="pts"></div>
+<span id="root-path" data-root=""></span><div id="nav-placeholder"></div>
+
+<div class="page">
+  <div class="ad-bar"><div class="ad-unit">Advertisement · 728×90</div></div>
+  <div class="hero" style="padding-bottom:1rem;">
+    <div class="pill-badge"><div class="badge-dot"></div>Our Story</div>
+    <h1 class="hero-title">About FitMetrics</h1>
+    <p class="hero-sub">Making science-backed health tools free, beautiful, and accessible to everyone on earth</p>
+  </div>
+
+  <div class="about-stats">
+    <div class="astat"><div class="astat-n">6+</div><div class="astat-l">Free Tools</div></div>
+    <div class="astat"><div class="astat-n">100%</div><div class="astat-l">Free Forever</div></div>
+    <div class="astat"><div class="astat-n">0</div><div class="astat-l">Data Stored</div></div>
+    <div class="astat"><div class="astat-n">∞</div><div class="astat-l">Calculations</div></div>
+  </div>
+
+  <div class="mission-card">
+    <div style="font-size:2.5rem;margin-bottom:1rem;">🎯</div>
+    <h2>Our Mission</h2>
+    <p>FitMetrics was built with a simple belief: everyone deserves access to accurate, science-backed health tools — for free, forever. Too many health apps are locked behind subscriptions, cluttered with dark patterns, or just plain ugly. We built something better.</p>
+    <p style="margin-top:1rem;">Every calculator on FitMetrics uses formulas from peer-reviewed research and WHO guidelines. Your data never leaves your device. No account, no tracking, no nonsense.</p>
+  </div>
+
+  <div style="text-align:center;padding:2rem 1.5rem 1rem;"><div class="section-head"><h2>Our Values</h2><p>What guides every decision we make</p></div></div>
+  <div class="values-grid">
+    <div class="val-card"><div class="val-ico">🔬</div><div class="val-name">Science First</div><div class="val-txt">Every formula is sourced from peer-reviewed research. We cite our sources and update when the science evolves.</div></div>
+    <div class="val-card"><div class="val-ico">🔒</div><div class="val-name">Privacy by Design</div><div class="val-txt">All calculations happen locally in your browser. We never collect, store, or sell any personal health data.</div></div>
+    <div class="val-card"><div class="val-ico">♿</div><div class="val-name">Accessible to All</div><div class="val-txt">Free forever. Designed to work beautifully on any device. No barriers between you and your health data.</div></div>
+    <div class="val-card"><div class="val-ico">✨</div><div class="val-name">Beautiful Design</div><div class="val-txt">Health tools shouldn't be ugly. We believe great design makes the experience more enjoyable and the results more meaningful.</div></div>
+    <div class="val-card"><div class="val-ico">⚡</div><div class="val-name">Instant Results</div><div class="val-txt">No loading screens, no waiting. Your results appear in real time the moment you interact with a calculator.</div></div>
+    <div class="val-card"><div class="val-ico">🌍</div><div class="val-name">Global Standard</div><div class="val-txt">Metric and imperial units on every tool. Serving users worldwide with culturally appropriate measurements.</div></div>
+  </div>
+
+  <div style="text-align:center;padding:1rem 1.5rem 3rem;">
+    <a href="tools/bmi.html" style="display:inline-block;background:linear-gradient(135deg,#5b21b6,#8b5cf6,#ec4899);background-size:300% 300%;padding:1rem 2.5rem;border-radius:16px;text-decoration:none;color:#fff;font-weight:700;font-size:.9rem;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 8px 32px rgba(109,40,217,.5);animation:btnGrad 5s ease infinite;">✦ Try the Calculators →</a>
+  </div>
+
+  <div class="ad-bar"><div class="ad-unit">Advertisement · 728×90</div></div>
+</div>
+
+<div id="footer-placeholder"></div>
+<script src="nav.js"></script><script src="main.js"></script>
+</body>
+</html>
